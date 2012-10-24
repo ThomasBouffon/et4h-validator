@@ -10,6 +10,14 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener; 
 import java.awt.event.ActionEvent; 
 import java.awt.event.KeyEvent;
+import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom. NamedNodeMap;
+import org.w3c.dom.Element;
 
 public class ET4HValidator implements Runnable {
 	JTextField inputField=new JTextField(50);
@@ -17,8 +25,45 @@ public class ET4HValidator implements Runnable {
 	JPanel p2 = new JPanel ();
 	JLabel resultMessage = new JLabel("Type a ticket # in the field above");
 	String message;
+	NodeList nList;
+	private int loadXML(String filename) {
+		try {
+			File xmlFile= new File(filename);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(xmlFile);
+			doc.getDocumentElement().normalize();
+			nList = doc.getElementsByTagName("ticket");
+			/*for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					NamedNodeMap namedNodeMap=nNode.getAttributes();
+					System.out.println("Root element :" +  nNode.getNodeName());
+					System.err.println(namedNodeMap.getNamedItem("id").getNodeValue());
+
+				}
+			}*/
+		}
+		catch (Exception e) {
+			System.err.printf("Error while opening ");
+			System.err.println(filename);
+			e.printStackTrace();
+
+			return 1;
+		}
+		return 0;
+	}
 	private void validate(String input) {
-		switch (input) {
+		String Status="XX";
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+			Node nNode = nList.item(temp);
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				NamedNodeMap namedNodeMap=nNode.getAttributes();
+				if(namedNodeMap.getNamedItem("id").getNodeValue().trim().equals(input)) {Status=namedNodeMap.getNamedItem("status").getNodeValue(); break;}
+
+			}
+		}
+		switch (Status) {
 			case "0" : 
 				message="Canceled Ticket";
 				break;
@@ -27,6 +72,9 @@ public class ET4HValidator implements Runnable {
 				break;
 			case "2" : 
 				message="Ticket Already Validated";
+				break;
+			case "XX" :
+				message="Ticket Not found";
 				break;
 			default:
 				message="Unknown code";
@@ -49,6 +97,7 @@ public class ET4HValidator implements Runnable {
 	public void run() {
 		// Create the window
 
+		loadXML("ex.xml");
 		JFrame f = new JFrame ("ET4HValidator");
 
 		// Sets the behavior for when the window is closed

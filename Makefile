@@ -1,4 +1,4 @@
-all: class jar
+all: class 
 class :
 	javac ET4HValidator.java
 jar : 
