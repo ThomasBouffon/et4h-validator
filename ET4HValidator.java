@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 import javax.swing.JSplitPane;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener; 
 import java.awt.event.ActionEvent; 
@@ -23,6 +24,7 @@ public class ET4HValidator implements Runnable {
 	JTextField inputField=new JTextField(50);
 	JPanel p1 = new JPanel ();
 	JPanel p2 = new JPanel ();
+	JFrame f = new JFrame ("ET4HValidator");
 	JLabel resultMessage = new JLabel("Type a ticket # in the field above");
 	String message;
 	NodeList nList;
@@ -54,6 +56,7 @@ public class ET4HValidator implements Runnable {
 		return 0;
 	}
 	private void validate(String input) {
+		String ImageName="ko.png";
 		String Status="XX";
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			Node nNode = nList.item(temp);
@@ -69,6 +72,7 @@ public class ET4HValidator implements Runnable {
 				break;
 			case "1" :
 				message="Valid Ticket";
+				ImageName="ok.png";
 				break;
 			case "2" : 
 				message="Ticket Already Validated";
@@ -81,7 +85,11 @@ public class ET4HValidator implements Runnable {
 				break;
 		}
 		resultMessage.setText(message);
+		resultMessage.setIcon(new ImageIcon(getClass().getResource(ImageName)));
 		resultMessage.repaint();
+		p2.setPreferredSize(p2.getPreferredSize());
+		f.pack();
+		f.repaint();
 
 	}
 
@@ -98,7 +106,6 @@ public class ET4HValidator implements Runnable {
 		// Create the window
 
 		loadXML("ex.xml");
-		JFrame f = new JFrame ("ET4HValidator");
 
 		// Sets the behavior for when the window is closed
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
