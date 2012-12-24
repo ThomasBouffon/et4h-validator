@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><event>
+	<info>
+		<name>Concert</name>
+		<place>Whereever you want</place>
+		<date>2012-11-11</date>
+	</info>
+	<tickets>
+		<ticket id="50799c42781667.07539174" status="2"/>
+		<ticket id="50799d22d87f85.17638675" status="2"/>
+		<ticket id="507a874b2e1b59.32655652" status="1"/>
+		<ticket id="507a874b2e4197.38088024" status="1"/>
+		<ticket id="507a874b2e5474.15903566" status="1"/>
+		<ticket id="507a874b2e65f9.74597489" status="1"/>
+		<ticket id="507aefd7ef0908.84890220" status="1"/>
+		<ticket id="507afcb94fe141.42931731" status="1"/>
+		<ticket id="507afcf66856e5.89752350" status="1"/>
+		<ticket id="507c0317a45c70.24980338" status="1"/>
+		<ticket id="507c0317a4af11.00230043" status="1"/>
+		<ticket id="507c0317a4c7c6.85527493" status="1"/>
+		<ticket id="507c046624c7f2.34308313" status="2"/>
+		<ticket id="507c046624fe66.09853037" status="1"/>
+		<ticket id="507c0cdcdb4e97.24435633" status="0"/>
+		<ticket id="507c0e7d7a1a48.56237146" status="1"/>
+		<ticket id="507c0f85a057e6.60439677" status="1"/>
+		<ticket id="507c10f3930f72.53756475" status="1"/>
+		<ticket id="507c1109f1bd80.40554456" status="1"/>
+		<ticket id="507c12eda8b778.16558930" status="1"/>
+		<ticket id="507c145884b950.31105343" status="1"/>
+		<ticket id="507c2760247671.11893211" status="1"/>
+		<ticket id="50855c21ce6300.51037027" status="1"/>
+		<ticket id="509028a65ecbb8.75932771" status="1"/>
+		<ticket id="509028a65f1dd2.92900584" status="1"/>
+		<ticket id="5093895c004d28.70875550" status="1"/>
+		<ticket id="5093dfbf737332.17113215" status="1"/>
+		<ticket id="509d4bb44af4c3.28203521" status="1"/>
+		<ticket id="50b22ba93ee1d0.57164300" status="1"/>
+		<ticket id="50b22ba9509749.96630621" status="1"/>
+	</tickets>
+</event>

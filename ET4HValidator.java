@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.JSplitPane;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener; 
 import java.awt.event.ActionEvent; 
@@ -19,6 +20,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom. NamedNodeMap;
 import org.w3c.dom.Element;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class ET4HValidator implements Runnable {
 	JTextField inputField=new JTextField(50);
@@ -28,12 +34,14 @@ public class ET4HValidator implements Runnable {
 	JLabel resultMessage = new JLabel("Type a ticket # in the field above");
 	String message;
 	NodeList nList;
+	Document doc;
+	String InputFileName;
 	private int loadXML(String filename) {
 		try {
 			File xmlFile= new File(filename);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 			nList = doc.getElementsByTagName("ticket");
 			/*for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -55,6 +63,25 @@ public class ET4HValidator implements Runnable {
 		}
 		return 0;
 	}
+	private void writeXML(String filename) {
+		try {
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File(filename));
+			transformer.transform(source, result);
+	
+		}
+		catch (Exception e) {
+			System.err.printf("Error while writing ");
+			System.err.println(filename);
+			e.printStackTrace();
+
+		
+		}
+		 
+		System.out.println("Done");
+	}
 	private void validate(String input) {
 		String ImageName="ko.png";
 		String Status="XX";
@@ -62,7 +89,18 @@ public class ET4HValidator implements Runnable {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				NamedNodeMap namedNodeMap=nNode.getAttributes();
-				if(namedNodeMap.getNamedItem("id").getNodeValue().trim().equals(input)) {Status=namedNodeMap.getNamedItem("status").getNodeValue(); break;}
+				if(namedNodeMap.getNamedItem("id").getNodeValue().trim().equals(input)) {
+					Status=namedNodeMap.getNamedItem("status").getNodeValue(); 
+					System.out.println(Status);
+					if (Status.equals("1")) {
+						namedNodeMap.getNamedItem("status").setNodeValue("2");
+
+					    System.out.println("1->2");writeXML(InputFileName);
+					    System.out.println("1->2");
+					}
+					break;
+				}
+				
 
 			}
 		}
@@ -105,8 +143,6 @@ public class ET4HValidator implements Runnable {
 	public void run() {
 		// Create the window
 
-		loadXML("ex.xml");
-
 		// Sets the behavior for when the window is closed
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// add a label and a button
@@ -122,6 +158,14 @@ public class ET4HValidator implements Runnable {
 		f.pack();
 		//By default, the window is not visible. Make it visible.
 		f.setVisible(true);
+		JFileChooser choix = new JFileChooser();
+		int retour=choix.showOpenDialog(f);
+		if(retour==JFileChooser.APPROVE_OPTION){
+		   // un fichier a été choisi (sortie par OK)
+		   // nom du fichier  choisi 
+		   InputFileName=choix.getSelectedFile().getAbsolutePath();
+		loadXML(InputFileName);
+		}
 	}
 
 	public static void main(String[] args) {
